@@ -1313,8 +1313,16 @@ func (r *entryRenderer) MinSize() fyne.Size {
 		return r.entry.content.MinSize().Add(fyne.NewSize(0, theme.InputBorderSize()*2))
 	}
 
-	charMin := r.entry.placeholderProvider().charMinSize(r.entry.Password, r.entry.TextStyle)
-	minSize := charMin.Add(fyne.NewSize(theme.Padding()*2, theme.Padding()*2))
+	var minSize fyne.Size
+	var charMin fyne.Size
+
+	charMin = r.entry.placeholderProvider().charMinSize(r.entry.Password, r.entry.TextStyle)
+	minSize = charMin
+	if r.entry.PlaceHolder != "" {
+		minSize = fyne.MeasureText(r.entry.PlaceHolder, theme.TextSize(), r.entry.TextStyle)
+	}
+
+	minSize = minSize.Add(fyne.NewSize(theme.Padding()*2, theme.Padding()*2))
 
 	if r.entry.MultiLine {
 		count := r.entry.multiLineRows
